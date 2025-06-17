@@ -12,8 +12,7 @@ import {
 import * as ImagePicker from 'expo-image-picker';
 import * as Progress from 'react-native-progress';
 import { useLocalSearchParams, useRouter } from 'expo-router';
-
-const APIURL = "https://0657-103-163-95-99.ngrok-free.app";
+import { API_URL } from '@/constants/env';
 
 const ImageUploader: React.FC = () => {
     const params = useLocalSearchParams();
@@ -41,9 +40,6 @@ const ImageUploader: React.FC = () => {
             const uriParts = image.split('.');
             const fileType = uriParts[uriParts.length - 1] || 'jpg';
             const imageName = `before_flying_${Date.now()}.${fileType}`;
-            console.log(uriParts);
-            console.log(fileType);
-            console.log(imageName);
             const formData = new FormData();
 
             if (Platform.OS === 'web') {
@@ -68,7 +64,7 @@ const ImageUploader: React.FC = () => {
             setUploading(true);
             setModalVisible(true);
             console.log(formData);
-            const uploadRes = await fetch(`${APIURL}/api/upload`, {
+            const uploadRes = await fetch(`${API_URL}/api/upload`, {
                 method: 'POST',
                 body: formData,
             });
@@ -79,7 +75,7 @@ const ImageUploader: React.FC = () => {
                 const uploadedImageUrl = data.imageUrl;
 
                 setProgress(1);
-                // ToastAndroid.show('Image uploaded successfully', ToastAndroid.SHORT);
+                ToastAndroid.show('Image uploaded successfully', ToastAndroid.SHORT);
 
                 setTimeout(() => {
                     router.push({
@@ -94,11 +90,11 @@ const ImageUploader: React.FC = () => {
                 }, 1500);
             } else {
                 console.error('Upload failed:', data.message || 'No imageUrl returned');
-                // ToastAndroid.show(`Upload failed: ${data.message || 'Server error'}`, ToastAndroid.LONG);
+                ToastAndroid.show(`Upload failed: ${data.message || 'Server error'}`, ToastAndroid.LONG);
             }
         } catch (error) {
             console.error('Upload failed:', error);
-            // ToastAndroid.show('Image upload failed. Check connection.', ToastAndroid.LONG);
+            ToastAndroid.show('Image upload failed. Check connection.', ToastAndroid.LONG);
         } finally {
             setTimeout(() => {
                 setUploading(false);
@@ -147,6 +143,8 @@ const ImageUploader: React.FC = () => {
                     </View>
                 </View>
             </Modal>
+            {/* Footer */}
+            <Text style={styles.footer}>Powered by VAANFLY</Text>
         </View>
     );
 };
@@ -163,9 +161,15 @@ const styles = StyleSheet.create({
     header: {
         fontSize: 20,
         fontWeight: '500',
-        color: '#1E90FF',
+        color: '#000',
         marginBottom: 30,
         textAlign: 'center',
+    },
+    footer: {
+        textAlign: 'center',
+        color: '#888',
+        paddingVertical: 20,
+        fontSize: 12,
     },
     card: {
         backgroundColor: '#fff',
@@ -178,7 +182,7 @@ const styles = StyleSheet.create({
         shadowOffset: { width: 0, height: 2 },
     },
     placeholder: {
-        height: 250,
+        height: 350,
         borderRadius: 12,
         borderWidth: 2,
         borderColor: '#cce0f9',
@@ -192,7 +196,7 @@ const styles = StyleSheet.create({
         fontSize: 16,
     },
     preview: {
-        height: 180,
+        height: 250,
         borderRadius: 12,
         width: '100%',
         marginBottom: 15,

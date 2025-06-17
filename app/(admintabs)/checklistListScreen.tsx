@@ -8,9 +8,7 @@ import {
     ActivityIndicator,
 } from "react-native";
 import { router } from "expo-router";
-
-// const APIURL = "https://appsail-50027943202.development.catalystappsail.in";
-const APIURL = "https://0657-103-163-95-99.ngrok-free.app";
+import { API_URL } from '@/constants/env';
 
 interface PilotInfo {
     date?: string;
@@ -34,9 +32,9 @@ export default function ChecklistListScreen() {
     useEffect(() => {
         const fetchAllChecklists = async () => {
             try {
-                const response = await fetch(`${APIURL}/api/checklist/all`);
+                const response = await fetch(`${API_URL}/api/checklist/all`);
                 const result = await response.json();
-
+                console.log(result);
                 setChecklists(result);
             } catch (err) {
                 console.error("Error fetching checklist data:", err);
@@ -66,10 +64,6 @@ export default function ChecklistListScreen() {
                     .map((entry: ChecklistEntry, index: number) => {
                         const pilotName = entry.pilotInfo?.pilotName || "Unknown Pilot";
                         const date = entry.pilotInfo?.date || `Entry ${entries.length - index}`;
-                        console.log("Navigating with:", {
-                            username,
-                            entryId: entry.id
-                        });
                         return (
                             <TouchableOpacity
                                 key={entry.id || index}
@@ -77,7 +71,7 @@ export default function ChecklistListScreen() {
                                 onPress={() =>
                                     router.push({
                                         pathname: "/(components)/ChecklistDetailsScreen",
-                                        params: { username, entryId: entry.id, },
+                                        params: { username },
                                     })
                                 }
                                 activeOpacity={0.8}

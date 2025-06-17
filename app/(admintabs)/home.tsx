@@ -1,16 +1,16 @@
-import React, { useState } from "react";
-import {
-  View,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  StyleSheet,
-  ToastAndroid
-} from "react-native";
+import { Colors } from "@/constants/Colors";
 import { Ionicons } from "@expo/vector-icons";
 import { Picker } from "@react-native-picker/picker";
-import { Colors } from "@/constants/Colors";
-import { router } from "expo-router";
+import React, { useState } from "react";
+import {
+  StyleSheet,
+  Text,
+  TextInput,
+  ToastAndroid,
+  TouchableOpacity,
+  View
+} from "react-native";
+import { API_URL } from '@/constants/env';
 
 type RoleType = "" | "admin" | "user";
 
@@ -27,7 +27,7 @@ export default function AddUserScreen() {
     }
 
     try {
-      const response = await fetch("https://0657-103-163-95-99.ngrok-free.app/api/auth/register", {
+      const response = await fetch(`${API_URL}/api/auth/register`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username, password, role }),
@@ -36,15 +36,18 @@ export default function AddUserScreen() {
       const data = await response.json();
 
       if (response.ok) {
-        // ToastAndroid.show("User created successfully", ToastAndroid.SHORT);
+        ToastAndroid.show("User created successfully", ToastAndroid.SHORT);
+        setUsername("");
+        setPassword("");
+        setRole("");
         console.log("user created successfully")
       } else {
-        // ToastAndroid.show("Error", data.message || "Failed to create user.");
+        ToastAndroid.show("Error", data.message || "Failed to create user.");
         console.log("Error", data.message)
       }
     } catch (err) {
       console.error(err);
-      // ToastAndroid.show("Network Error", ToastAndroid.SHORT);
+      ToastAndroid.show("Network Error", ToastAndroid.SHORT);
     }
   };
 

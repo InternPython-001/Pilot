@@ -89,7 +89,7 @@ export default function ProfileScreen() {
               objectFit: "contain",
             }}
           />
-          <TouchableOpacity
+          {/* <TouchableOpacity
             style={{
               position: "absolute",
               bottom: 0,
@@ -100,7 +100,7 @@ export default function ProfileScreen() {
             }}
           >
             <MaterialIcons name="mode-edit" size={24} color="white" />
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </View>
         <Text style={{ fontSize: 18 }}>
           {username || "User"}

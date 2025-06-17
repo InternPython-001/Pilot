@@ -16,7 +16,7 @@ export default function TabLayout() {
                 },
                 tabBarActiveTintColor: Colors.primary,
                 tabBarInactiveTintColor: Colors.text,
-                headerShown: false,
+                // headerShown: false,
             }}
         >
             <Tabs.Screen
@@ -26,6 +26,8 @@ export default function TabLayout() {
                     tabBarIcon: ({ color, size }) => (
                         <AntDesign name="home" size={size} color={color} />
                     ),
+                    headerShown: true,
+                    headerTitle: "VAANFLY Pilot Assist",
                 }}
             />
             <Tabs.Screen

@@ -6,13 +6,12 @@ import {
   StyleSheet,
   Text,
   View,
+  Image
 } from "react-native";
-
-// const APIURL = "https://appsail-50027943202.development.catalystappsail.in";
-const APIURL = "https://5b7d-103-163-95-99.ngrok-free.app";
+import { API_URL } from "@/constants/env";
 
 export default function ChecklistDetailsScreen() {
-  const { username, entryId } = useLocalSearchParams();
+  const { username } = useLocalSearchParams();
   const [entry, setEntry] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 
@@ -26,9 +25,8 @@ export default function ChecklistDetailsScreen() {
   useEffect(() => {
     const fetchEntry = async () => {
       try {
-        const response = await fetch(`${APIURL}/api/checklist/${username}`);
+        const response = await fetch(`${API_URL}/api/checklist/${username}`);
         const data = await response.json();
-
         if (data && data.pilotInfo) {
           setEntry(data); // Data is already parsed on backend
         } else {
@@ -76,18 +74,53 @@ export default function ChecklistDetailsScreen() {
           </View>
         ))}
       </View>
+      {/* Before Flying Image */}
+      {entry.checklist?.beforeFlyingImage && (
+        <View style={{ marginBottom: 12 }}>
+          <Text style={styles.label}>Before Flying Image:</Text>
+          <Image
+            source={{ uri: entry.checklist.beforeFlyingImage }}
+            style={styles.image}
+            resizeMode="contain"
+          />
+        </View>
+      )}
+
+      {/* After Flying Image */}
+      {entry.checklist?.afterFlyingImage && (
+        <View style={{ marginBottom: 12 }}>
+          <Text style={styles.label}>After Flying Image:</Text>
+          <Image
+            source={{ uri: entry.checklist.afterFlyingImage }}
+            style={styles.image}
+            resizeMode="contain"
+          />
+        </View>
+      )}
 
       {/* Checklist */}
       <View style={styles.card}>
-        <Text style={styles.heading}>Checklist</Text>
-        {entry.checklist?.map((item: any, i: number) => (
-          <View key={i} style={styles.checklistRow}>
-            <Text style={styles.checklistLabel}>{item.title}</Text>
-            <Text style={[styles.statusText, item.checked ? styles.checked : styles.notChecked]}>
-              {item.checked ? "✅" : "❌"}
-            </Text>
-          </View>
-        ))}
+        <Text style={[styles.label, { marginTop: 10 }]}>Guidelines:</Text>
+        {Array.isArray(entry.checklist?.guidelines) &&
+          entry.checklist.guidelines.map((guideline: any, index: number) => (
+            <View key={index} style={styles.checklistRow}>
+              <View style={{ flex: 1 }}>
+                <Text style={styles.checklistLabel}>{guideline.title}</Text>
+                {/* {guideline.description ? (
+                  <Text style={{ fontSize: 14, color: '#888' }}>{guideline.description}</Text>
+                ) : null} */}
+              </View>
+              <Text
+                style={[
+                  styles.statusText,
+                  guideline.checked ? styles.checked : styles.notChecked,
+                ]}
+              >
+                {guideline.checked ? '✅' : '❌'}
+              </Text>
+            </View>
+          ))}
+
       </View>
       <View>
         <Text style={{ textAlign: "center", color: '#ddd', position: 'relative', bottom: 0 }}>Powered by VAANFLY</Text>
@@ -164,4 +197,13 @@ const styles = StyleSheet.create({
   statusText: {
     fontSize: 18,
   },
+  image: {
+    width: "100%",
+    height: 200,
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: "#ccc",
+    marginTop: 8,
+  },
+
 });

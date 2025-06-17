@@ -20,6 +20,7 @@ const WEATHER_API_KEY = '2820de08909b4771b8960833251106';
 export default function weatherReport() {
   const router = useRouter();
   const { pilotInfo } = useLocalSearchParams();
+  const [isLoading, setIsLoading] = useState(false);
 
   const [temperature, setTemperature] = useState('');
   const [precipitation, setPrecipitation] = useState('');
@@ -51,6 +52,7 @@ export default function weatherReport() {
   }, [pilotInfo]);
 
   const fetchWeatherData = async (lat: number, lon: number) => {
+    setIsLoading(true);
     try {
       const response = await fetch(
         `https://api.weatherapi.com/v1/current.json?key=${WEATHER_API_KEY}&q=${lat},${lon}`
@@ -65,6 +67,8 @@ export default function weatherReport() {
     } catch (error) {
       ToastAndroid.show('Failed to fetch weather', ToastAndroid.SHORT);
       console.error(error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -111,59 +115,73 @@ export default function weatherReport() {
       style={styles.container}
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}
     >
-      <ScrollView contentContainerStyle={styles.scrollContainer}>
-        <Text style={styles.title}>Weather Report</Text>
-        <Text style={styles.description}>
-          Enter the environmental conditions observed during the test.
-        </Text>
+      <View style={{ flex: 1 }}>
+        <ScrollView contentContainerStyle={styles.scrollContainer}>
+          <View>
+            <Text style={styles.title}>Weather Report</Text>
+            <Text style={styles.description}>
+              Enter the environmental conditions observed during the test.
+            </Text>
 
-        <TextInput
-          style={styles.input}
-          placeholder="Temperature (°C)"
-          value={temperature}
-          onChangeText={setTemperature}
-          keyboardType="numeric"
-          placeholderTextColor="#888"
-          cursorColor={Colors.primary}
-        />
+            <TextInput
+              style={styles.input}
+              placeholder="Temperature (°C)"
+              value={temperature}
+              onChangeText={setTemperature}
+              keyboardType="numeric"
+              placeholderTextColor="#888"
+              cursorColor={Colors.primary}
+            />
 
-        <TextInput
-          style={styles.input}
-          placeholder="Precipitation (mm)"
-          value={precipitation}
-          onChangeText={setPrecipitation}
-          keyboardType="numeric"
-          placeholderTextColor="#888"
-          cursorColor={Colors.primary}
-        />
+            <TextInput
+              style={styles.input}
+              placeholder="Precipitation (mm)"
+              value={precipitation}
+              onChangeText={setPrecipitation}
+              keyboardType="numeric"
+              placeholderTextColor="#888"
+              cursorColor={Colors.primary}
+            />
 
-        <TextInput
-          style={styles.input}
-          placeholder="Humidity (%)"
-          value={humidity}
-          onChangeText={setHumidity}
-          keyboardType="numeric"
-          placeholderTextColor="#888"
-          cursorColor={Colors.primary}
-        />
+            <TextInput
+              style={styles.input}
+              placeholder="Humidity (%)"
+              value={humidity}
+              onChangeText={setHumidity}
+              keyboardType="numeric"
+              placeholderTextColor="#888"
+              cursorColor={Colors.primary}
+            />
 
-        <TextInput
-          style={styles.input}
-          placeholder="Wind (km/h)"
-          value={wind}
-          onChangeText={setWind}
-          keyboardType="numeric"
-          placeholderTextColor="#888"
-          cursorColor={Colors.primary}
-        />
+            <TextInput
+              style={styles.input}
+              placeholder="Wind (km/h)"
+              value={wind}
+              onChangeText={setWind}
+              keyboardType="numeric"
+              placeholderTextColor="#888"
+              cursorColor={Colors.primary}
+            />
+            {isLoading && (
+              <View style={{ alignItems: 'center', marginBottom: 20 }}>
+                <Text style={{ color: '#555' }}>Fetching weather data...</Text>
+              </View>
+            )}
 
-        <TouchableOpacity style={styles.button} onPress={handleContinue}>
-          <Text style={styles.buttonText}>Continue</Text>
-        </TouchableOpacity>
-        <View>
-          <Text style={{ textAlign: "center", color: '#ddd', position: 'relative', bottom: 0 }}>Powered by VAANFLY</Text>
-        </View>
-      </ScrollView>
+            <TouchableOpacity
+              style={[styles.button, isLoading && { opacity: 0.6 }]}
+              onPress={handleContinue}
+              disabled={isLoading}
+            >
+              <Text style={styles.buttonText}>
+                {isLoading ? 'Loading...' : 'Continue'}
+              </Text>
+            </TouchableOpacity>
+          </View>
+          {/* Footer */}
+          <Text style={styles.footer}>Powered by VAANFLY</Text>
+        </ScrollView>
+      </View>
     </KeyboardAvoidingView>
   );
 }
@@ -174,8 +192,15 @@ const styles = StyleSheet.create({
     backgroundColor: '#F3F4F6',
   },
   scrollContainer: {
+    flexGrow: 1,
+    justifyContent: 'space-between',
     padding: 20,
-    paddingTop: 60,
+  },
+  footer: {
+    textAlign: 'center',
+    color: '#888',
+    paddingVertical: 20,
+    fontSize: 12,
   },
   title: {
     fontSize: 28,

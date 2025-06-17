@@ -12,8 +12,6 @@ import Checkbox from 'expo-checkbox';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { Colors } from '@/constants/Colors';
 
-const APIURL = "https://5b7d-103-163-95-99.ngrok-free.app";
-// const APIURL = "https://appsail-50027943202.development.catalystappsail.in";
 
 type GuidelineItem = {
   title: string;
