@@ -10,11 +10,12 @@ import {
   TouchableOpacity,
   View
 } from "react-native";
-import { API_URL } from '@/constants/env';
+import useApi from '@/constants/env';
 
 type RoleType = "" | "admin" | "user";
 
 export default function AddUserScreen() {
+  const { API_URL } = useApi();
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [role, setRole] = useState<RoleType>("");

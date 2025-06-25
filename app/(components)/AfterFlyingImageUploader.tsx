@@ -12,9 +12,10 @@ import {
 import * as ImagePicker from 'expo-image-picker';
 import * as Progress from 'react-native-progress';
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import { API_URL } from '@/constants/env';
+import useApi from '@/constants/env';
 
 const AfterFlyingImageUploader: React.FC = () => {
+    const { API_URL } = useApi();
     const params = useLocalSearchParams();
     const router = useRouter();
 
@@ -132,14 +133,26 @@ const AfterFlyingImageUploader: React.FC = () => {
             const data = await response.json();
 
             if (response.ok) {
-                ToastAndroid.show('Checklist saved successfully!', ToastAndroid.LONG);
-                router.push('/(tabs)'); // or home screen
+                // ToastAndroid.show('Checklist saved successfully!', ToastAndroid.LONG);
+
+                // 🔽 Download the PDF if URL is returned
+                if (data.downloadURL) {
+                    const link = document.createElement('a');
+                    link.href = data.downloadURL;
+                    link.download = 'Checklist.pdf';
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                }
+
+                // ✅ Navigate after download starts
+                router.push('/(tabs)');
             } else {
-                ToastAndroid.show(`Failed: ${data.message || 'Unknown error'}`, ToastAndroid.LONG);
+                // ToastAndroid.show(`Failed: ${data.message || 'Unknown error'}`, ToastAndroid.LONG);
             }
         } catch (error) {
             console.error('Submission failed:', error);
-            ToastAndroid.show('Submission failed. Check network.', ToastAndroid.LONG);
+            // ToastAndroid.show('Submission failed. Check network.', ToastAndroid.LONG);
         }
     };
 

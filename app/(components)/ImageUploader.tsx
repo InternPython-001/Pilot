@@ -12,9 +12,10 @@ import {
 import * as ImagePicker from 'expo-image-picker';
 import * as Progress from 'react-native-progress';
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import { API_URL } from '@/constants/env';
+import useApi from '@/constants/env';
 
 const ImageUploader: React.FC = () => {
+    const { API_URL } = useApi();
     const params = useLocalSearchParams();
     const router = useRouter();
     const [image, setImage] = useState<string | null>(null);
@@ -75,7 +76,7 @@ const ImageUploader: React.FC = () => {
                 const uploadedImageUrl = data.imageUrl;
 
                 setProgress(1);
-                ToastAndroid.show('Image uploaded successfully', ToastAndroid.SHORT);
+                // ToastAndroid.show('Image uploaded successfully', ToastAndroid.SHORT);
 
                 setTimeout(() => {
                     router.push({
@@ -90,11 +91,11 @@ const ImageUploader: React.FC = () => {
                 }, 1500);
             } else {
                 console.error('Upload failed:', data.message || 'No imageUrl returned');
-                ToastAndroid.show(`Upload failed: ${data.message || 'Server error'}`, ToastAndroid.LONG);
+                // ToastAndroid.show(`Upload failed: ${data.message || 'Server error'}`, ToastAndroid.LONG);
             }
         } catch (error) {
             console.error('Upload failed:', error);
-            ToastAndroid.show('Image upload failed. Check connection.', ToastAndroid.LONG);
+            // ToastAndroid.show('Image upload failed. Check connection.', ToastAndroid.LONG);
         } finally {
             setTimeout(() => {
                 setUploading(false);

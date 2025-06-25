@@ -8,7 +8,7 @@ import {
     ActivityIndicator,
 } from "react-native";
 import { router } from "expo-router";
-import { API_URL } from '@/constants/env';
+import useApi from '@/constants/env';
 
 interface PilotInfo {
     date?: string;
@@ -26,6 +26,7 @@ interface ChecklistEntry {
 type ChecklistData = Record<string, ChecklistEntry[]>;
 
 export default function ChecklistListScreen() {
+    const { API_URL } = useApi();
     const [checklists, setChecklists] = useState<ChecklistData>({});
     const [loading, setLoading] = useState(true);
 

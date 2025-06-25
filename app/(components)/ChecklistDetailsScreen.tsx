@@ -8,9 +8,10 @@ import {
   View,
   Image
 } from "react-native";
-import { API_URL } from "@/constants/env";
+import useApi from "@/constants/env";
 
 export default function ChecklistDetailsScreen() {
+  const { API_URL } = useApi();
   const { username } = useLocalSearchParams();
   const [entry, setEntry] = useState<any>(null);
   const [loading, setLoading] = useState(true);
