@@ -1,36 +1,38 @@
-import React, { useEffect, useState } from 'react';
-import { Stack, useRouter, Redirect } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { jwtDecode } from 'jwt-decode';
+import { Stack, useRouter } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
-import { View, ActivityIndicator } from 'react-native';
+import { jwtDecode } from 'jwt-decode';
+import React, { useEffect, useState } from 'react';
 
 SplashScreen.preventAutoHideAsync();
-type RoutePaths = "/(tabs)" | "/(auth)" | "/(admintabs)/checklistListScreen";
-export default function RootLayout() {
 
+type RoutePaths = "/(tabs)" | "/(auth)" | "/(admintabs)/checklistListScreen";
+
+export default function RootLayout() {
   const [isAppReady, setAppReady] = useState(false);
-  const [redirectTo, setRedirectTo] = useState<RoutePaths | null>(null);
+  const [redirectTo, setRedirectTo] = useState<RoutePaths>("/(auth)");
+  const router = useRouter();
 
   useEffect(() => {
     const checkToken = async () => {
       try {
         const token = await AsyncStorage.getItem('token');
         if (token) {
-          const decoded = jwtDecode<{ role?: string }>(token);
-          const role = decoded?.role;
-          if (role === 'user') {
-            setRedirectTo('/(tabs)');
-          } else if (role === 'admin') {
-            setRedirectTo('/(admintabs)/checklistListScreen');
-          } else {
+          try {
+            const decoded = jwtDecode<{ role?: string }>(token);
+            const role = decoded?.role;
+            if (role === 'user') {
+              setRedirectTo('/(tabs)');
+            } else if (role === 'admin') {
+              setRedirectTo('/(admintabs)/checklistListScreen');
+            }
+          } catch {
             setRedirectTo('/(auth)');
           }
         } else {
           setRedirectTo('/(auth)');
         }
-      } catch (error) {
-        console.error('Token check failed:', error);
+      } catch {
         setRedirectTo('/(auth)');
       } finally {
         setAppReady(true);
@@ -41,19 +43,15 @@ export default function RootLayout() {
     checkToken();
   }, []);
 
-  if (!isAppReady || !redirectTo) {
-    return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <ActivityIndicator size="large" color="#007AFF" />
-      </View>
-    );
-  }
+  useEffect(() => {
+    if (isAppReady && redirectTo) {
+      router.replace(redirectTo);
+    }
+  }, [isAppReady, redirectTo]);
 
-  // Use Redirect instead of push/replace
   return (
     <>
       <Stack screenOptions={{ headerShown: false }} />
-      <Redirect href={redirectTo} />
     </>
   );
 }
