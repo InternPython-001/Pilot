@@ -76,7 +76,7 @@ const ImageUploader: React.FC = () => {
                 const uploadedImageUrl = data.imageUrl;
 
                 setProgress(1);
-                // ToastAndroid.show('Image uploaded successfully', ToastAndroid.SHORT);
+                ToastAndroid.show('Image uploaded successfully', ToastAndroid.SHORT);
 
                 setTimeout(() => {
                     router.push({
@@ -91,11 +91,11 @@ const ImageUploader: React.FC = () => {
                 }, 1500);
             } else {
                 console.error('Upload failed:', data.message || 'No imageUrl returned');
-                // ToastAndroid.show(`Upload failed: ${data.message || 'Server error'}`, ToastAndroid.LONG);
+                ToastAndroid.show(`Upload failed: ${data.message || 'Server error'}`, ToastAndroid.LONG);
             }
         } catch (error) {
             console.error('Upload failed:', error);
-            // ToastAndroid.show('Image upload failed. Check connection.', ToastAndroid.LONG);
+            ToastAndroid.show('Image upload failed. Check connection.', ToastAndroid.LONG);
         } finally {
             setTimeout(() => {
                 setUploading(false);

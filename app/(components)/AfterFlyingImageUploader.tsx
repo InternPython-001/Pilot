@@ -133,7 +133,7 @@ const AfterFlyingImageUploader: React.FC = () => {
             const data = await response.json();
 
             if (response.ok) {
-                // ToastAndroid.show('Checklist saved successfully!', ToastAndroid.LONG);
+                ToastAndroid.show('Checklist saved successfully!', ToastAndroid.LONG);
 
                 // 🔽 Download the PDF if URL is returned
                 if (data.downloadURL) {
@@ -148,11 +148,11 @@ const AfterFlyingImageUploader: React.FC = () => {
                 // ✅ Navigate after download starts
                 router.push('/(tabs)');
             } else {
-                // ToastAndroid.show(`Failed: ${data.message || 'Unknown error'}`, ToastAndroid.LONG);
+                ToastAndroid.show(`Failed: ${data.message || 'Unknown error'}`, ToastAndroid.LONG);
             }
         } catch (error) {
             console.error('Submission failed:', error);
-            // ToastAndroid.show('Submission failed. Check network.', ToastAndroid.LONG);
+            ToastAndroid.show('Submission failed. Check network.', ToastAndroid.LONG);
         }
     };
 
