@@ -13,12 +13,13 @@ import * as ImagePicker from 'expo-image-picker';
 import * as Progress from 'react-native-progress';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import useApi from '@/constants/env';
+import * as WebBrowser from 'expo-web-browser';
 
 const AfterFlyingImageUploader: React.FC = () => {
     const { API_URL } = useApi();
     const params = useLocalSearchParams();
     const router = useRouter();
-
+    const [uploadSuccess, setUploadSuccess] = useState(false);
     const pilotInfo = JSON.parse(Array.isArray(params.pilotInfo) ? params.pilotInfo[0] : params.pilotInfo || '{}');
     const weatherReport = JSON.parse(Array.isArray(params.weatherReport) ? params.weatherReport[0] : params.weatherReport || '{}');
     const guidelines = JSON.parse(Array.isArray(params.guidelines) ? params.guidelines[0] : params.guidelines || '[]');
@@ -87,6 +88,7 @@ const AfterFlyingImageUploader: React.FC = () => {
             if (response.ok) {
                 setAfterFlyingImageName(data.imageUrl);
                 ToastAndroid.show('Image uploaded successfully', ToastAndroid.SHORT);
+                setUploadSuccess(true);
                 console.log('Image uploaded successfully');
             } else {
                 console.log(`Upload failed: ${data.message}`);
@@ -135,16 +137,9 @@ const AfterFlyingImageUploader: React.FC = () => {
             if (response.ok) {
                 ToastAndroid.show('Checklist saved successfully!', ToastAndroid.LONG);
 
-                // 🔽 Download the PDF if URL is returned
                 if (data.downloadURL) {
-                    const link = document.createElement('a');
-                    link.href = data.downloadURL;
-                    link.download = 'Checklist.pdf';
-                    document.body.appendChild(link);
-                    link.click();
-                    document.body.removeChild(link);
+                    await WebBrowser.openBrowserAsync(data.downloadURL); // Open PDF in browser or viewer
                 }
-
                 // ✅ Navigate after download starts
                 router.push('/(tabs)');
             } else {
@@ -168,12 +163,13 @@ const AfterFlyingImageUploader: React.FC = () => {
                         <Text style={styles.placeholderText}>No image selected</Text>
                     </View>
                 )}
+                {!uploadSuccess && (
+                    <TouchableOpacity style={styles.pickButton} onPress={pickImage}>
+                        <Text style={styles.buttonText}>Choose Image</Text>
+                    </TouchableOpacity>
+                )}
 
-                <TouchableOpacity style={styles.pickButton} onPress={pickImage}>
-                    <Text style={styles.buttonText}>Choose Image</Text>
-                </TouchableOpacity>
-
-                {image && (
+                {image && !uploadSuccess && (
                     <TouchableOpacity style={styles.uploadButton} onPress={uploadImage}>
                         <Text style={styles.buttonText}>Upload</Text>
                     </TouchableOpacity>

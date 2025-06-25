@@ -18,6 +18,7 @@ const ImageUploader: React.FC = () => {
     const { API_URL } = useApi();
     const params = useLocalSearchParams();
     const router = useRouter();
+    const [uploadSuccess, setUploadSuccess] = useState(false);
     const [image, setImage] = useState<string | null>(null);
     const [uploading, setUploading] = useState<boolean>(false);
     const [progress, setProgress] = useState<number>(0);
@@ -77,7 +78,7 @@ const ImageUploader: React.FC = () => {
 
                 setProgress(1);
                 ToastAndroid.show('Image uploaded successfully', ToastAndroid.SHORT);
-
+                setUploadSuccess(true);
                 setTimeout(() => {
                     router.push({
                         pathname: '/(components)/checklistscreen',
@@ -118,11 +119,13 @@ const ImageUploader: React.FC = () => {
                     </View>
                 )}
 
-                <TouchableOpacity style={styles.pickButton} onPress={pickImage}>
-                    <Text style={styles.buttonText}>Choose Image</Text>
-                </TouchableOpacity>
+                {!uploadSuccess && (
+                    <TouchableOpacity style={styles.pickButton} onPress={pickImage}>
+                        <Text style={styles.buttonText}>Choose Image</Text>
+                    </TouchableOpacity>
+                )}
 
-                {image && (
+                {image && !uploadSuccess && (
                     <TouchableOpacity style={styles.uploadButton} onPress={uploadImage}>
                         <Text style={styles.buttonText}>Upload</Text>
                     </TouchableOpacity>
