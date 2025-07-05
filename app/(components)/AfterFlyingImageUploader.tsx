@@ -1,19 +1,19 @@
+import useApi from '@/constants/env';
+import * as ImagePicker from 'expo-image-picker';
+import { useLocalSearchParams, useRouter } from 'expo-router';
+import * as WebBrowser from 'expo-web-browser';
 import React, { useState } from 'react';
 import {
-    View,
-    Text,
     Image,
-    TouchableOpacity,
-    StyleSheet,
     Modal,
+    Platform,
+    StyleSheet,
+    Text,
     ToastAndroid,
-    Platform
+    TouchableOpacity,
+    View
 } from 'react-native';
-import * as ImagePicker from 'expo-image-picker';
 import * as Progress from 'react-native-progress';
-import { useLocalSearchParams, useRouter } from 'expo-router';
-import useApi from '@/constants/env';
-import * as WebBrowser from 'expo-web-browser';
 
 const AfterFlyingImageUploader: React.FC = () => {
     const { API_URL } = useApi();
@@ -23,7 +23,7 @@ const AfterFlyingImageUploader: React.FC = () => {
     const pilotInfo = JSON.parse(Array.isArray(params.pilotInfo) ? params.pilotInfo[0] : params.pilotInfo || '{}');
     const weatherReport = JSON.parse(Array.isArray(params.weatherReport) ? params.weatherReport[0] : params.weatherReport || '{}');
     const guidelines = JSON.parse(Array.isArray(params.guidelines) ? params.guidelines[0] : params.guidelines || '[]');
-    const dschecklist = JSON.parse(Array.isArray(params.dschecklist) ? params.dschecklist[0] : params.dschecklist || '[]');
+    const dschecklist = JSON.parse(Array.isArray(params.dsChecklist) ? params.dsChecklist[0] : params.dsChecklist || '[]');
 
     const username = Array.isArray(params.username) ? params.username[0] : params.username;
     const beforeFlyingImage = Array.isArray(params.beforeFlyingImage) ? params.beforeFlyingImage[0] : params.beforeFlyingImage;
