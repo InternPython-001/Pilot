@@ -46,13 +46,17 @@ export default function DSchecklistscreen() {
   };
 
   const handleNext = () => {
+    const checkedItems = checklist
+    .filter((item) => item.checked)
+    .map((item) => item.task);
+
     router.push({
       pathname: '/(components)/AfterFlyingImageUploader',
       params: {
         pilotInfo: params.pilotInfo,
         username: params.username,
         beforeFlyingImage: params.beforeFlyingImage,
-        dsChecklist: JSON.stringify(checklist),
+        dsChecklist: JSON.stringify(checkedItems),
       },
     });
   };

@@ -36,21 +36,20 @@ export default function index() {
 
   const handleContinue = async () => {
     const formData = {
-      pilotName,
+      pilotName: pilotName.trim(),
       date: date.toISOString().split('T')[0],
-      trialId,
-      testCase,
+      trialId: trialId.trim(),
+      testCase: testCase.trim(),
     };
 
-    if (!formData) {
-      ToastAndroid.show('Please enter All the fields', ToastAndroid.SHORT);
+    // Validation: check if any required field is empty
+    if (!formData.pilotName || !formData.trialId || !formData.testCase) {
+      ToastAndroid.show('Please fill all the fields', ToastAndroid.SHORT);
       return;
     }
 
     try {
       await AsyncStorage.setItem('pilotInfo', JSON.stringify(formData));
-      // console.log('Saved to storage:', formData);
-      // Alert.alert('Form Submitted', JSON.stringify(formData, null, 2));
 
       router.push({
         pathname: "/(components)/selectTestType",
@@ -60,7 +59,6 @@ export default function index() {
       });
     } catch (err) {
       ToastAndroid.show('Error saving to AsyncStorage', ToastAndroid.SHORT);
-      // Alert.alert('Storage Error', 'Could not save pilot info');
     }
   };
 
