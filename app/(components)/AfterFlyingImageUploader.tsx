@@ -23,6 +23,7 @@ const AfterFlyingImageUploader: React.FC = () => {
     const pilotInfo = JSON.parse(Array.isArray(params.pilotInfo) ? params.pilotInfo[0] : params.pilotInfo || '{}');
     const weatherReport = JSON.parse(Array.isArray(params.weatherReport) ? params.weatherReport[0] : params.weatherReport || '{}');
     const guidelines = JSON.parse(Array.isArray(params.guidelines) ? params.guidelines[0] : params.guidelines || '[]');
+    const dschecklist = JSON.parse(Array.isArray(params.dschecklist) ? params.dschecklist[0] : params.dschecklist || '[]');
 
     const username = Array.isArray(params.username) ? params.username[0] : params.username;
     const beforeFlyingImage = Array.isArray(params.beforeFlyingImage) ? params.beforeFlyingImage[0] : params.beforeFlyingImage;
@@ -120,6 +121,7 @@ const AfterFlyingImageUploader: React.FC = () => {
                 beforeFlyingImage,
                 afterFlyingImage: afterFlyingImageName,
                 guidelines,
+                dschecklist,
             },
         };
 
