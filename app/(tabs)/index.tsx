@@ -53,7 +53,7 @@ export default function index() {
       // Alert.alert('Form Submitted', JSON.stringify(formData, null, 2));
 
       router.push({
-        pathname: "/(components)/weatherReport",
+        pathname: "/(components)/selectTestType",
         params: {
           pilotInfo: JSON.stringify(formData),
         },

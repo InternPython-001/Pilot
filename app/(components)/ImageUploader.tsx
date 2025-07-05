@@ -1,18 +1,18 @@
-import React, { useEffect, useState } from 'react';
-import {
-    View,
-    Text,
-    Image,
-    TouchableOpacity,
-    StyleSheet,
-    Modal,
-    ToastAndroid,
-    Platform
-} from 'react-native';
-import * as ImagePicker from 'expo-image-picker';
-import * as Progress from 'react-native-progress';
-import { useLocalSearchParams, useRouter } from 'expo-router';
 import useApi from '@/constants/env';
+import * as ImagePicker from 'expo-image-picker';
+import { useLocalSearchParams, useRouter } from 'expo-router';
+import React, { useState } from 'react';
+import {
+    Image,
+    Modal,
+    Platform,
+    StyleSheet,
+    Text,
+    ToastAndroid,
+    TouchableOpacity,
+    View
+} from 'react-native';
+import * as Progress from 'react-native-progress';
 
 const ImageUploader: React.FC = () => {
     const { API_URL } = useApi();
@@ -45,7 +45,6 @@ const ImageUploader: React.FC = () => {
             const formData = new FormData();
 
             if (Platform.OS === 'web') {
-                // Convert URI to blob for web
                 const response = await fetch(image);
                 const blob = await response.blob();
 
@@ -55,7 +54,6 @@ const ImageUploader: React.FC = () => {
 
                 formData.append('file', webFile);
             } else {
-                // Use native file object
                 formData.append('file', {
                     uri: image,
                     name: imageName,
@@ -65,7 +63,7 @@ const ImageUploader: React.FC = () => {
 
             setUploading(true);
             setModalVisible(true);
-            console.log(formData);
+
             const uploadRes = await fetch(`${API_URL}/api/upload`, {
                 method: 'POST',
                 body: formData,
@@ -75,19 +73,31 @@ const ImageUploader: React.FC = () => {
 
             if (uploadRes.ok && data.imageUrl) {
                 const uploadedImageUrl = data.imageUrl;
-
                 setProgress(1);
                 ToastAndroid.show('Image uploaded successfully', ToastAndroid.SHORT);
                 setUploadSuccess(true);
+
                 setTimeout(() => {
+                    const pilotInfo = params?.pilotInfo ? JSON.parse(params.pilotInfo as string) : {};
+                    const testType = pilotInfo?.testType || '';
+                    const isOpenAir = testType === 'OPEN AIR';
+
+                    // Prepare the route & params
+                    const targetPath = isOpenAir ? '/(components)/checklistscreen' : '/(components)/DSchecklistscreen' as const;
+
+                    const nextParams: any = {
+                        pilotInfo: params.pilotInfo,
+                        username: params.username,
+                        beforeFlyingImage: uploadedImageUrl,
+                    };
+
+                    if (isOpenAir) {
+                        nextParams.weatherReport = params.weatherReport;
+                    }
+
                     router.push({
-                        pathname: '/(components)/checklistscreen',
-                        params: {
-                            pilotInfo: params.pilotInfo,
-                            weatherReport: params.weatherReport,
-                            username: params.username,
-                            beforeFlyingImage: uploadedImageUrl,
-                        },
+                        pathname: targetPath as any,
+                        params: nextParams,
                     });
                 }, 1500);
             } else {

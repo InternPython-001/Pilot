@@ -19,7 +19,7 @@ const WEATHER_API_KEY = '2820de08909b4771b8960833251106';
 
 export default function weatherReport() {
   const router = useRouter();
-  const { pilotInfo } = useLocalSearchParams();
+  const { pilotInfo,  } = useLocalSearchParams();
   const [isLoading, setIsLoading] = useState(false);
 
   const [temperature, setTemperature] = useState('');
@@ -101,6 +101,7 @@ export default function weatherReport() {
           pilotInfo: JSON.stringify(allData.pilotInfo),
           weatherReport: JSON.stringify(allData.weatherReport),
           username: allData.username,
+          testType: allData.pilotInfo?.testType ?? '',
         },
       });
 

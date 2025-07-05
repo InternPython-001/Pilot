@@ -1,0 +1,70 @@
+[
+  {
+    "id": 1,
+    "task": "Check the LiPo battery, camera, RC and laptop are fully charged at the beginning of test"
+  },
+  {
+    "id": 2,
+    "task": "The test setup shall include a fully assembled drone, LiPo battery, Dynamic stand and the Clamp of exact size for the model"
+  },
+  {
+    "id": 3,
+    "task": "Securely clamp the drone frame to the dynamic stand or plate using industrial clamps or fixtures that prevent fly away of drone"
+  },
+  {
+    "id": 4,
+    "task": "Ensure no propeller is connected during the initial dry test run"
+  },
+  {
+    "id": 5,
+    "task": "Place the dynamic stand in the center of a clear area with at least 5 meters radius and ensure no overhead obstacles."
+  },
+  {
+    "id": 6,
+    "task": "Wear protective gear, including gloves, helmet, and eye protection"
+  },
+  {
+    "id": 7,
+    "task": "Connect the battery, and ensure all components are properly connected and powered"
+  },
+  {
+    "id": 8,
+    "task": "Perform initial system checks: sensor calibration status, battery health, GPS lock, EKF status, RC control signal"
+  },
+  {
+    "id": 9,
+    "task": "Perform a dry run by arming the drone without propellers, check the vibration, motor emergency stop, motor spin directions"
+  },
+  {
+    "id": 10,
+    "task": "Disarm and disconnect the battery"
+  },
+  {
+    "id": 11,
+    "task": "Attach the propeller and connect the battery, keep a safe distance and turn on  the recorder on screen ans camera"
+  },
+  {
+    "id": 12,
+    "task": "Arm the motor and keep it in spin and check for the motor spin direction clearly and ensure it is mounted correctly"
+  },
+  {
+    "id": 13,
+    "task": "Rise the throttle slowly untill it starts takoff and holds by the clamp"
+  },
+  {
+    "id": 14,
+    "task": "After takeoff slowly give the roll, pitch, and yaw movement and observe the drone stability"
+  },
+  {
+    "id": 15,
+    "task": "Disarm by slowly reducing the throtlle and land it back on the Plate"
+  },
+  {
+    "id": 16,
+    "task": "Once disarmed stop the recordings, and battery"
+  },
+  {
+    "id": 17,
+    "task": "Inspect the drone and ensure no damage and cleanit and end the trail"
+  }
+]

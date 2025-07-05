@@ -74,18 +74,18 @@ export default function index() {
         await AsyncStorage.setItem('token', result.token);
         await AsyncStorage.setItem('user', JSON.stringify(result.user));
 
-        ToastAndroid.show('Login successful', ToastAndroid.SHORT);
+        // ToastAndroid.show('Login successful', ToastAndroid.SHORT);
         if (result.user.role === 'user') {
           router.replace('/(tabs)');
         } else if (result.user.role === 'admin') {
           router.replace('/(admintabs)/checklistListScreen');
         }
       } else {
-        ToastAndroid.show(result.message || 'Login failed', ToastAndroid.SHORT);
+        // ToastAndroid.show(result.message || 'Login failed', ToastAndroid.SHORT);
       }
     } catch (err) {
       console.error('Login error:', err);
-      ToastAndroid.show('Network error', ToastAndroid.SHORT);
+      // ToastAndroid.show('Network error', ToastAndroid.SHORT);
     } finally {
       setSubmitting(false);
     }
